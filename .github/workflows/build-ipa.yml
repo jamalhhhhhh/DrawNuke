@@ -1,0 +1,31 @@
+name: Build IPA
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Build app (unsigned)
+        run: xcodebuild -project DrawNuke.xcodeproj -target DrawNuke -configuration Release -sdk iphoneos CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO
+
+      - name: Package IPA
+        run: |
+          mkdir -p Payload
+          cp -R Build/Products/Release-iphoneos/DrawNuke.app Payload/
+          zip -qry DrawNuke.ipa Payload
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: DrawNuke-ipa
+          path: DrawNuke.ipa
