@@ -20,8 +20,15 @@ jobs:
 
       - name: Package IPA
         run: |
+          APP_PATH=$(find . -type d -name "DrawNuke.app" | grep -v Intermediates | head -1 || true)
+          if [ -z "$APP_PATH" ]; then
+            echo "App bundle not found:"
+            find . -maxdepth 8 -type d -name "*.app"
+            exit 1
+          fi
+          echo "Found app at $APP_PATH"
           mkdir -p Payload
-          cp -R Build/Products/Release-iphoneos/DrawNuke.app Payload/
+          cp -R "$APP_PATH" Payload/
           zip -qry DrawNuke.ipa Payload
 
       - name: Upload IPA
