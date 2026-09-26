@@ -10,6 +10,24 @@ A drawing game for iPhone with three modes, built with SwiftUI + SpriteKit.
 | **Sandbox** | Physics playground. Draw ramps, walls and towers that crates and balls collide with, drop more debris, then press **NUKE** to blast everything across the screen with a fireball, shockwave and screen shake. |
 | **Nuke** | Paint your own warhead onto the missile (8 paint colors), press **TEST FIRE** - the missile launches with a flame trail, detonates mid-air with a fireball, mushroom cloud and "BOOM", and topples the city skyline. Press **Rebuild** to start over. |
 
+## RemoteTouch - control your PC from your iPhone
+
+A second app in this repo that mirrors your PC's screen and lets you control it over Wi-Fi.
+
+**Features:** live screen view (~3 fps), drag to move the mouse, tap to click, one-tap launch buttons (Calculator, Notepad, Paint, Files, Chrome, Task Manager, Steam, CMD), volume keys, and a command box that runs anything on the PC and shows the output.
+
+**Setup:**
+1. On the PC: run the server (Python 3.8+ with Pillow - `pip install pillow`):
+   ```
+   python RemoteTouchServer\remote_server.py
+   ```
+   It prints your **PC IP** and a **PIN**. Allow it through the Windows firewall popup (private networks only).
+2. Install `RemoteTouch.ipa` on your iPhone (same Sideloadly flow as DrawNuke - same trust-developer steps too).
+3. Open the app, enter the PC IP + PIN, hit **Connect** - allow the "local network" permission prompt.
+4. Your PC's screen appears - tap to click, drag to move the cursor.
+
+**Security notes:** every request requires the PIN, so only people with it can connect. The command box is arbitrary code execution on your PC - never expose port 8666 to the internet, and keep the server LAN-only. Both phone and PC must be on the same Wi-Fi network. Primary monitor only.
+
 ## Project layout
 
 - `project.yml` - Xcode project definition for [xcodegen](https://github.com/yonaskolb/XcodeGen)
