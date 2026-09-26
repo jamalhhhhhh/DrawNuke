@@ -100,7 +100,7 @@ class SandboxScene: SKScene {
         node.physicsBody?.friction = 0.7
         node.physicsBody?.restitution = 0.2
         node.physicsBody?.affectedByGravity = false
-        node.isDynamic = false
+        node.physicsBody?.isDynamic = false
     }
 
     func detonate() {
@@ -112,12 +112,12 @@ class SandboxScene: SKScene {
         shakeScreen()
 
         let radius = max(size.width, size.height) * 1.2
-        physicsWorld.enumerateBodies { body, _ in
-            guard body.isDynamic, let node = body.node else { return }
+        for node in children {
+            guard let body = node.physicsBody, body.isDynamic else { continue }
             let dx = node.position.x - center.x
             let dy = node.position.y - center.y
             let distance = sqrt(dx * dx + dy * dy)
-            guard distance < radius, distance > 0 else { return }
+            guard distance < radius, distance > 0 else { continue }
             let strength = 950 * (1 - distance / radius)
             let length = max(distance, 1)
             body.applyImpulse(CGVector(dx: dx / length * strength, dy: dy / length * strength + 180))

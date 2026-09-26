@@ -151,7 +151,6 @@ class NukeScene: SKScene {
     private func addTrail() {
         let trail = SKEmitterNode()
         trail.particleTexture = TextureFactory.glowCircleTexture(radius: 12, color: UIColor(red: 1.0, green: 0.65, blue: 0.2, alpha: 1.0))
-        trail.numParticles = 0
         trail.particleBirthRate = 350
         trail.particleLifetime = 0.7
         trail.particleSpeed = 90
@@ -178,15 +177,15 @@ class NukeScene: SKScene {
 
     private func blastBuildings(from center: CGPoint) {
         let radius = max(size.width, size.height) * 1.4
-        physicsWorld.enumerateBodies { body, _ in
-            guard let node = body.node, node.name != "border" else { return }
+        for node in children {
+            guard node.name != "border", let body = node.physicsBody else { continue }
             if !body.isDynamic {
                 body.isDynamic = true
             }
             let dx = node.position.x - center.x
             let dy = node.position.y - center.y
             let distance = sqrt(dx * dx + dy * dy)
-            guard distance < radius, distance > 0 else { return }
+            guard distance < radius, distance > 0 else { continue }
             let strength = 1100 * (1 - distance / radius)
             let length = max(distance, 1)
             body.applyImpulse(CGVector(dx: dx / length * strength, dy: dy / length * strength + 250))
@@ -199,7 +198,6 @@ class NukeScene: SKScene {
 
         let stem = SKEmitterNode()
         stem.particleTexture = smoke
-        stem.numParticles = 380
         stem.particleBirthRate = 420
         stem.particleLifetime = 2.2
         stem.particleLifetimeRange = 0.8
@@ -214,11 +212,10 @@ class NukeScene: SKScene {
         stem.position = point
         stem.zPosition = 25
         addChild(stem)
-        stem.run(.sequence([.wait(forDuration: 3.5), .removeFromParent()]))
+        stem.run(.sequence([.wait(forDuration: 2.5), .fadeAlpha(to: 0, duration: 1.0), .removeFromParent()]))
 
         let cap = SKEmitterNode()
         cap.particleTexture = smoke
-        cap.numParticles = 240
         cap.particleBirthRate = 260
         cap.particleLifetime = 2.8
         cap.particleLifetimeRange = 0.8
@@ -233,7 +230,7 @@ class NukeScene: SKScene {
         cap.position = CGPoint(x: point.x, y: point.y + 210)
         cap.zPosition = 25
         addChild(cap)
-        cap.run(.sequence([.wait(forDuration: 4), .removeFromParent()]))
+        cap.run(.sequence([.wait(forDuration: 2.8), .fadeAlpha(to: 0, duration: 1.2), .removeFromParent()]))
     }
 
     private func boomLabel(at point: CGPoint) {

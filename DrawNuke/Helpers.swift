@@ -37,7 +37,6 @@ extension SKScene {
     func fireball(at point: CGPoint) {
         let emitter = SKEmitterNode()
         emitter.particleTexture = TextureFactory.glowCircleTexture(radius: 26, color: UIColor(red: 1.0, green: 0.55, blue: 0.1, alpha: 1.0))
-        emitter.numParticles = 350
         emitter.particleBirthRate = 900
         emitter.particleLifetime = 1.1
         emitter.particleLifetimeRange = 0.5
@@ -52,7 +51,7 @@ extension SKScene {
         emitter.position = point
         emitter.zPosition = 30
         addChild(emitter)
-        emitter.run(.sequence([.wait(forDuration: 2.0), .removeFromParent()]))
+        emitter.run(.sequence([.wait(forDuration: 1.2), .fadeAlpha(to: 0, duration: 0.8), .removeFromParent()]))
     }
 
     func shockRing(at point: CGPoint) {
