@@ -31,6 +31,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.drawnuke.remotetouch
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_FILE: RemoteTouch/Info.plist
+        INFOPLIST_KEY_NSLocalNetworkUsageDescription: RemoteTouch finds and connects to your own PC on this Wi-Fi network.
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
