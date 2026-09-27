@@ -28,6 +28,24 @@ A second app in this repo that mirrors your PC's screen and lets you control it 
 
 **Security notes:** every request requires the PIN, so only people with it can connect. The command box is arbitrary code execution on your PC - never expose port 8666 to the internet, and keep the server LAN-only. Both phone and PC must be on the same Wi-Fi network. Primary monitor only.
 
+## RemoteMenu - mod menu dylib (for Animal Company Companion)
+
+`RemoteMenu/RemoteMenu.m` compiles (via the "Build Dylib" workflow) into `RemoteMenu.dylib` - a floating mod menu overlay:
+
+- Green circle at the top of the screen, **draggable anywhere** (clamped to screen edges)
+- **Tap it** (no drag) and the menu springs open with an animation
+- Menu has **Test** and **Prefab** toggles, persisted via NSUserDefaults
+- Touches outside the circle/menu pass straight through to the game
+
+**To use it:**
+1. Get the target IPA (e.g. Animal Company Companion) - however you normally obtain it - and drop it in this folder.
+2. Download `RemoteMenu.dylib` from the Actions artifacts.
+3. **Sideloadly**: drag the IPA in -> **Advanced options** -> enable dylib injection -> select `RemoteMenu.dylib` -> sign with your Apple ID -> install.
+4. Trust the developer (Settings -> General -> VPN & Device Management), open the game - the circle appears at the top.
+5. Drag it around, tap it for the menu, flip the toggles.
+
+Toggles currently just persist their state. To wire them to real game features later, hooks (e.g. Method swizzling on the game's classes) can read the exported `modTestEnabled` / `modPrefabEnabled` globals.
+
 ## Project layout
 
 - `project.yml` - Xcode project definition for [xcodegen](https://github.com/yonaskolb/XcodeGen)
