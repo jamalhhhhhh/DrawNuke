@@ -12,7 +12,7 @@ jobs:
       - name: Compile dylib
         run: |
           xcrun -sdk iphoneos clang -arch arm64 -dynamiclib \
-            -framework UIKit -framework Foundation \
+            -framework UIKit -framework Foundation -framework CoreGraphics \
             -fobjc-arc -fvisibility=hidden \
             -miphoneos-version-min=13.0 \
             -install_name "@rpath/RemoteMenu.dylib" \
