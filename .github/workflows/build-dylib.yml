@@ -1,0 +1,26 @@
+name: Build Dylib
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Compile dylib
+        run: |
+          xcrun -sdk iphoneos clang -arch arm64 -dynamiclib \
+            -framework UIKit -framework Foundation \
+            -fobjc-arc -fvisibility=hidden \
+            -miphoneos-version-min=13.0 \
+            -install_name "@rpath/RemoteMenu.dylib" \
+            -o RemoteMenu.dylib RemoteMenu/RemoteMenu.m
+          file RemoteMenu.dylib
+
+      - name: Upload dylib
+        uses: actions/upload-artifact@v4
+        with:
+          name: RemoteMenu-dylib
+          path: RemoteMenu.dylib
